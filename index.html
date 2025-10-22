@@ -1,598 +1,235 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сравнение инвестиционных продуктов</title>
-    <style>
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
-            --light-color: #ecf0f1;
-            --success-color: #27ae60;
-            --border-radius: 8px;
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #f5f7fa;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-        }
-        
-        h1 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-        
-        .description {
-            color: #666;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .calculator {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-        
-        @media (max-width: 768px) {
-            .calculator {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .input-section {
-            background-color: white;
-            padding: 25px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-        }
-        
-        .input-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-        
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        
-        input:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-        }
-        
-        button {
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: background-color 0.3s;
-            width: 100%;
-        }
-        
-        button:hover {
-            background-color: #2980b9;
-        }
-        
-        .results-section {
-            background-color: white;
-            padding: 25px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-        }
-        
-        .product-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        .product-card {
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-            padding: 20px;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--box-shadow);
-        }
-        
-        .product-card h3 {
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            padding: 8px 0;
-            border-bottom: 1px dashed #eee;
-        }
-        
-        .result-label {
-            font-weight: 500;
-        }
-        
-        .result-value {
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-        
-        .highlight {
-            color: var(--success-color);
-            font-weight: 700;
-        }
-        
-        .bank-deposit {
-            border-top: 4px solid #3498db;
-        }
-        
-        .insurance-deposit {
-            border-top: 4px solid #e74c3c;
-        }
-        
-        .iis-type3 {
-            border-top: 4px solid #27ae60;
-        }
-        
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 30px;
-            box-shadow: var(--box-shadow);
-            border-radius: var(--border-radius);
-            overflow: hidden;
-        }
-        
-        .comparison-table th, .comparison-table td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .comparison-table th {
-            background-color: var(--primary-color);
-            color: white;
-            font-weight: 600;
-        }
-        
-        .comparison-table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        
-        .comparison-table tr:hover {
-            background-color: #f1f1f1;
-        }
-        
-        .best-option {
-            background-color: rgba(39, 174, 96, 0.1) !important;
-        }
-        
-        .info-icon {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            background-color: #bbb;
-            color: white;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 18px;
-            font-size: 12px;
-            margin-left: 5px;
-            cursor: help;
-        }
-        
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 250px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 10px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -125px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 14px;
-            font-weight: normal;
-        }
-        
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
-        }
-        
-        .commission-section {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: var(--border-radius);
-            margin-top: 20px;
-        }
-        
-        .commission-section h3 {
-            margin-bottom: 15px;
-            color: var(--primary-color);
-            font-size: 18px;
-        }
-    
-/* --- Responsive tweaks injected --- */
-* { box-sizing: border-box; }
-.container, .wrapper, body, html { max-width: 100%; }
-input, select, button { width: 100%; max-width: 100%; }
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-@media (max-width: 640px) {
-  .grid { grid-template-columns: 1fr; }
-  table { display: block; overflow-x: auto; width: 100%; }
-}
-
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Калькулятор сравнения инвестиционных продуктов</title>
+  <style>
+    :root{
+      --bg:#f5f7fb; --card:#fff; --border:#e5e7eb; --text:#0f172a; --muted:#6b7280;
+      --blue:#2563eb; --green:#16a34a; --red:#dc2626; --shadow:0 6px 24px rgba(2,6,23,.08);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Sego UI,Roboto,Arial}
+    .container{max-width:1100px;margin:28px auto;padding:0 16px}
+    h1{font-size:28px;margin:0 0 10px;text-align:center}
+    .sub{color:var(--muted);text-align:center;margin-bottom:22px}
+    .grid{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:start}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .card h2{font-size:18px;margin:0;padding:16px 18px;border-bottom:1px solid var(--border)}
+    .card .body{padding:16px 18px}
+    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+    input{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:12px;font-size:14px;background:#fff}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+    .mt{margin-top:12px}
+    .btn{width:100%;padding:12px 14px;border:0;border-radius:12px;background:var(--blue);color:#fff;font-weight:600;font-size:15px;cursor:pointer}
+    .btn:active{transform:translateY(1px)}
+    .results{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+    @media(max-width:900px){.results{grid-template-columns:1fr}}
+    .panel{border-radius:16px;border:1px solid var(--border);overflow:hidden;background:#fff;box-shadow:var(--shadow)}
+    .panel h3{margin:0;padding:14px 16px;border-bottom:1px solid var(--border);font-size:16px}
+    .panel.blue h3{border-top:4px solid #2563eb}
+    .panel.red h3{border-top:4px solid #dc2626}
+    .panel.green h3{border-top:4px solid #16a34a}
+    .kv{display:flex;justify-content:space-between;padding:10px 16px;border-bottom:1px dashed #eef2f7;font-size:14px}
+    .kv:last-child{border-bottom:0}
+    .kv b{font-variant-numeric:tabular-nums}
+    .muted{color:var(--muted)}
+    .tfoot{background:#fafafa;padding:10px 16px;border-top:1px solid var(--border)}
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Калькулятор сравнения инвестиционных продуктов</h1>
-            <p class="description">Сравните доходность банковских депозитов, депозитов в страховой оболочке и ИИС 3 типа с учетом налогов, комиссий и капитализации</p>
-        </header>
-        
-        <div class="calculator">
-            <div class="input-section">
-                <h2>Параметры вклада</h2>
-                <div class="input-group">
-                    <label for="amount">Сумма вклада (руб.)</label>
-                    <input type="number" id="amount" min="1000" step="1000" value="1000000">
-                </div>
-                <div class="input-group">
-                    <label for="rate">Годовая процентная ставка (%)</label>
-                    <input type="number" id="rate" min="1" max="50" step="0.1" value="10">
-                </div>
-                <div class="input-group">
-                    <label for="taxRate">Ставка налога (%)</label>
-                    <input type="number" id="taxRate" min="0" max="50" step="0.1" value="13">
-                </div>
-                <div class="input-group">
-                    <label for="term">Срок вклада (лет)</label>
-                    <input type="number" id="term" min="1" max="30" step="1" value="5">
-                </div>
-                
-                <div class="commission-section">
-                    <h3>Комиссии за управление (MF)</h3>
-                    <div class="input-group">
-                        <label for="insuranceMF">Депозит в страховой оболочке (%)</label>
-                        <input type="number" id="insuranceMF" min="0" max="10" step="0.1" value="1.5">
-                    </div>
-                    <div class="input-group">
-                        <label for="iisMF">ИИС 3 типа (%)</label>
-                        <input type="number" id="iisMF" min="0" max="10" step="0.1" value="1.5">
-                    </div>
-                </div>
-                
-                <button id="calculateBtn">Рассчитать</button>
-            </div>
-            
-            <div class="results-section">
-                <h2>Результаты расчета</h2>
-                <div class="product-cards">
-                    <div class="product-card bank-deposit">
-                        <h3>Банковский депозит</h3>
-                        <div class="result-item">
-                            <span class="result-label">Сумма в начале:</span>
-                            <span class="result-value" id="bank-start">1 000 000 руб.</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Сумма в конце:</span>
-                            <span class="result-value" id="bank-end">-</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Налоги за весь период:</span>
-                            <span class="result-value" id="bank-tax">-</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Чистый доход:</span>
-                            <span class="result-value" id="bank-net">-</span>
-                        </div>
-                    </div>
-                    
-                    <div class="product-card insurance-deposit">
-                        <h3>Депозит в страховой оболочке</h3>
-                        <div class="result-item">
-                            <span class="result-label">Сумма в начале:</span>
-                            <span class="result-value" id="insurance-start">1 000 000 руб.</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Сумма в конце:</span>
-                            <span class="result-value" id="insurance-end">-</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Налоги за весь период:</span>
-                            <span class="result-value" id="insurance-tax">-</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Комиссии за весь период:</span>
-                            <span class="result-value" id="insurance-fee">-</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Чистый доход:</span>
-                            <span class="result-value" id="insurance-net">-</span>
-                        </div>
-                    </div>
-                    
-                    <div class="product-card iis-type3">
-                        <h3>ИИС 3 типа</h3>
-                        <div class="result-item">
-                            <span class="result-label">Сумма в начале:</span>
-                            <span class="result-value" id="iis-start">1 000 000 руб.</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Сумма в конце:</span>
-                            <span class="result-value" id="iis-end">-</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Налоги за весь период:</span>
-                            <span class="result-value" id="iis-tax">-</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Комиссии за весь период:</span>
-                            <span class="result-value" id="iis-fee">-</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Чистый доход:</span>
-                            <span class="result-value" id="iis-net">-</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <table class="comparison-table">
-                    <thead>
-                        <tr>
-                            <th>Параметр</th>
-                            <th>Банковский депозит</th>
-                            <th>Депозит в страховой оболочке</th>
-                            <th>ИИС 3 типа</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Сумма в конце срока</td>
-                            <td id="comp-bank-end">-</td>
-                            <td id="comp-insurance-end">-</td>
-                            <td id="comp-iis-end">-</td>
-                        </tr>
-                        <tr>
-                            <td>Налоги за весь период</td>
-                            <td id="comp-bank-tax">-</td>
-                            <td id="comp-insurance-tax">-</td>
-                            <td id="comp-iis-tax">-</td>
-                        </tr>
-                        <tr>
-                            <td>Комиссии за весь период</td>
-                            <td id="comp-bank-fee">-</td>
-                            <td id="comp-insurance-fee">-</td>
-                            <td id="comp-iis-fee">-</td>
-                        </tr>
-                        <tr>
-                            <td>Чистый доход</td>
-                            <td id="comp-bank-net">-</td>
-                            <td id="comp-insurance-net">-</td>
-                            <td id="comp-iis-net">-</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+  <div class="container">
+    <h1>Калькулятор сравнения инвестиционных продуктов</h1>
+    <div class="sub">Считает банковский депозит, депозит в страховой оболочке и ИИС 3 типа с учётом <u>всех налогов и комиссий</u> в финальной сумме.</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const calculateBtn = document.getElementById('calculateBtn');
-            calculateBtn.addEventListener('click', calculateResults);
-            
-            // Выполняем расчет при загрузке страницы
-            calculateResults();
-            
-            // Добавляем обработчики для автоматического пересчета при изменении значений
-            const inputs = document.querySelectorAll('input');
-            inputs.forEach(input => {
-                input.addEventListener('input', calculateResults);
-            });
-            
-            function calculateResults() {
-                // Получаем значения из полей ввода
-                const amount = parseFloat(document.getElementById('amount').value);
-                const rate = parseFloat(document.getElementById('rate').value) / 100;
-                const taxRate = parseFloat(document.getElementById('taxRate').value) / 100;
-                const term = parseInt(document.getElementById('term').value);
-                const insuranceMF = parseFloat(document.getElementById('insuranceMF').value) / 100;
-                const iisMF = parseFloat(document.getElementById('iisMF').value) / 100;
-                
-                // Форматирование чисел в денежный формат
-                const formatter = new Intl.NumberFormat('ru-RU', {
-                    style: 'currency',
-                    currency: 'RUB',
-                    minimumFractionDigits: 0
-                });
-                
-                // Расчет для банковского депозита
-                let bankAmount = amount;
-                let bankTaxTotal = 0;
-                
-                for (let year = 1; year <= term; year++) {
-                    const income = bankAmount * rate;
-                    const tax = income * taxRate;
-                    bankTaxTotal += tax;
-                    bankAmount = bankAmount + income - tax;
-                }
-                
-                const bankNetIncome = bankAmount - amount;
-                
-                // Расчет для депозита в страховой оболочке
-                let insuranceAmount = amount;
-                let insuranceFeeTotal = 0;
-                
-                for (let year = 1; year <= term; year++) {
-                    const income = insuranceAmount * rate;
-                    const fee = insuranceAmount * insuranceMF;
-                    insuranceFeeTotal += fee;
-                    insuranceAmount = insuranceAmount + income - fee;
-                }
-                
-                const insuranceTax = (insuranceAmount - amount) * taxRate;
-                const insuranceNetIncome = insuranceAmount - amount - insuranceTax;
-                
-                // Расчет для ИИС 3 типа
-                let iisAmount = amount;
-                let iisFeeTotal = 0;
-                
-                for (let year = 1; year <= term; year++) {
-                    const income = iisAmount * rate;
-                    const fee = iisAmount * iisMF;
-                    iisFeeTotal += fee;
-                    iisAmount = iisAmount + income - fee;
-                }
-                
-                // Налоговая льгота ИИС: с прибыли до 90 млн руб. налог не уплачивается
-                const iisProfit = iisAmount - amount;
-                const taxFreeLimit = 90000000; // 90 млн руб.
-                const taxableProfit = Math.max(0, iisProfit - taxFreeLimit);
-                const iisTax = taxableProfit * taxRate;
-                const iisNetIncome = iisAmount - amount - iisTax;
-                
-                // Обновление результатов для банковского депозита
-                document.getElementById('bank-start').textContent = formatter.format(amount);
-                document.getElementById('bank-end').textContent = formatter.format(bankAmount);
-                document.getElementById('bank-tax').textContent = formatter.format(bankTaxTotal);
-                document.getElementById('bank-net').textContent = formatter.format(bankNetIncome);
-                
-                // Обновление результатов для депозита в страховой оболочке
-                document.getElementById('insurance-start').textContent = formatter.format(amount);
-                document.getElementById('insurance-end').textContent = formatter.format(insuranceAmount);
-                document.getElementById('insurance-tax').textContent = formatter.format(insuranceTax);
-                document.getElementById('insurance-fee').textContent = formatter.format(insuranceFeeTotal);
-                document.getElementById('insurance-net').textContent = formatter.format(insuranceNetIncome);
-                
-                // Обновление результатов для ИИС 3 типа
-                document.getElementById('iis-start').textContent = formatter.format(amount);
-                document.getElementById('iis-end').textContent = formatter.format(iisAmount);
-                document.getElementById('iis-tax').textContent = formatter.format(iisTax);
-                document.getElementById('iis-fee').textContent = formatter.format(iisFeeTotal);
-                document.getElementById('iis-net').textContent = formatter.format(iisNetIncome);
-                
-                // Обновление таблицы сравнения
-                document.getElementById('comp-bank-end').textContent = formatter.format(bankAmount);
-                document.getElementById('comp-insurance-end').textContent = formatter.format(insuranceAmount);
-                document.getElementById('comp-iis-end').textContent = formatter.format(iisAmount);
-                
-                document.getElementById('comp-bank-tax').textContent = formatter.format(bankTaxTotal);
-                document.getElementById('comp-insurance-tax').textContent = formatter.format(insuranceTax);
-                document.getElementById('comp-iis-tax').textContent = formatter.format(iisTax);
-                
-                document.getElementById('comp-bank-fee').textContent = formatter.format(0);
-                document.getElementById('comp-insurance-fee').textContent = formatter.format(insuranceFeeTotal);
-                document.getElementById('comp-iis-fee').textContent = formatter.format(iisFeeTotal);
-                
-                document.getElementById('comp-bank-net').textContent = formatter.format(bankNetIncome);
-                document.getElementById('comp-insurance-net').textContent = formatter.format(insuranceNetIncome);
-                document.getElementById('comp-iis-net').textContent = formatter.format(iisNetIncome);
-                
-                // Подсветка лучшего варианта по чистому доходу
-                const netIncomes = [bankNetIncome, insuranceNetIncome, iisNetIncome];
-                const maxNetIncome = Math.max(...netIncomes);
-                
-                // Сброс классов подсветки
-                document.querySelectorAll('.comparison-table tr:last-child td').forEach(td => {
-                    td.classList.remove('best-option');
-                });
-                
-                // Подсветка лучшего варианта
-                if (bankNetIncome === maxNetIncome) {
-                    document.getElementById('comp-bank-net').classList.add('best-option');
-                } else if (insuranceNetIncome === maxNetIncome) {
-                    document.getElementById('comp-insurance-net').classList.add('best-option');
-                } else if (iisNetIncome === maxNetIncome) {
-                    document.getElementById('comp-iis-net').classList.add('best-option');
-                }
-            }
-        });
-    </script>
+    <div class="grid">
+      <div class="card">
+        <h2>Параметры</h2>
+        <div class="body">
+          <div class="row">
+            <div>
+              <label>Сумма вклада (руб.)</label>
+              <input id="amount" type="text" value="500000000">
+            </div>
+            <div>
+              <label>Годовая ставка доходности (%)</label>
+              <input id="rate" type="text" value="15">
+            </div>
+          </div>
+          <div class="row mt">
+            <div>
+              <label>Ставка налога НДФЛ (%)</label>
+              <input id="tax" type="text" value="13">
+            </div>
+            <div>
+              <label>Срок вклада (лет)</label>
+              <input id="term" type="text" value="5">
+            </div>
+          </div>
+
+          <h2 style="margin-top:18px">Комиссии за управление (MF)</h2>
+          <div class="body" style="padding:0">
+            <div class="body">
+              <div class="row">
+                <div>
+                  <label>Депозит в страховой оболочке (%)</label>
+                  <input id="insMF" type="text" value="1.5">
+                </div>
+                <div>
+                  <label>ИИС 3 типа (%)</label>
+                  <input id="iisMF" type="text" value="1">
+                </div>
+              </div>
+              <div class="mt">
+                <label>Льгота ИИС 3 типа (руб.) — прибыль, не облагаемая НДФЛ</label>
+                <input id="iisExempt" type="text" value="90000000">
+              </div>
+              <div class="mt">
+                <button class="btn" id="run">Рассчитать</button>
+              </div>
+              <div class="mt muted" style="font-size:12px">Подсказка: можно вводить числа с запятой или точкой.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Результаты расчёта</h2>
+        <div class="body">
+          <div class="results">
+            <div class="panel blue" id="resBank">
+              <h3>Банковский депозит</h3>
+              <div class="kv"><span>Сумма в начале:</span><b id="b_start">–</b></div>
+              <div class="kv"><span>Сумма в конце (после налогов и комиссий):</span><b id="b_end">–</b></div>
+              <div class="kv"><span>Налоги за весь период:</span><b id="b_tax">–</b></div>
+              <div class="kv"><span>Комиссии за весь период:</span><b id="b_fee">–</b></div>
+            </div>
+
+            <div class="panel red" id="resIns">
+              <h3>Депозит в страховой оболочке</h3>
+              <div class="kv"><span>Сумма в начале:</span><b id="i_start">–</b></div>
+              <div class="kv"><span>Сумма в конце (после налогов и комиссий):</span><b id="i_end">–</b></div>
+              <div class="kv"><span>Налоги за весь период:</span><b id="i_tax">–</b></div>
+              <div class="kv"><span>Комиссии за весь период:</span><b id="i_fee">–</b></div>
+            </div>
+
+            <div class="panel green" id="resIIS">
+              <h3>ИИС 3 типа</h3>
+              <div class="kv"><span>Сумма в начале:</span><b id="s_start">–</b></div>
+              <div class="kv"><span>Сумма в конце (после налогов и комиссий):</span><b id="s_end">–</b></div>
+              <div class="kv"><span>Налоги за весь период:</span><b id="s_tax">–</b></div>
+              <div class="kv"><span>Комиссии за весь период:</span><b id="s_fee">–</b></div>
+            </div>
+          </div>
+
+          <div class="tfoot muted" style="margin-top:10px;font-size:12px">
+            Банковский депозит: налог удерживается ежегодно с процентов; комиссий нет. <br>
+            Страховая оболочка: MF взимается ежегодно от суммы конца года до комиссии; налог удерживается один раз в конце срока с всей прибыли. <br>
+            ИИС 3 типа: MF ежегодно от суммы конца года до комиссии; в конце срока НДФЛ берётся только с прибыли сверх льготы.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <script>
-(function(){
-  // Переопределение расчётов, если они объявлены в глобальной области и используют годовой цикл
-  function fixCalc(fnName, amountKey, mfKey, rateKey){
-    try{
-      const orig = window[fnName];
-      if (typeof orig !== 'function') return;
-      window[fnName] = function(){
-        // перехват входных значений
-        const res = orig.apply(this, arguments);
-        // Нет универсального способа переписать внутренности без исходников,
-        // поэтому этот блок оставлен как заглушка (на случай если автозамена не сработала)
-        return res;
-      };
-      console.log("Patched:", fnName);
-    }catch(e){}
-  }
-  // Вызовы-заглушки (безопасны, если функций нет)
-  fixCalc('calcIIS', 'iisAmount', 'iisMF', 'rate');
-  fixCalc('calcInsurance', 'insuranceAmount', 'insuranceMF', 'rate');
-})();
-</script>
+function norm(v){
+  if(typeof v!=='string') v = String(v);
+  v = v.replace(',', '.').replace(/\s+/g,'');
+  const x = parseFloat(v);
+  return isFinite(x) ? x : 0;
+}
+function money(n){
+  const opts = {style:'currency', currency:'RUB', maximumFractionDigits:2};
+  return new Intl.NumberFormat('ru-RU', opts).format(n);
+}
+function pct(v){ return norm(v) / 100; }
 
+function calcBank(amount, rate, tax, years){
+  let a = amount, taxTotal = 0;
+  for (let y=0;y<years;y++){
+    const income = a * rate;
+    const t = Math.max(income,0) * tax; // без льготы, ежегодно
+    taxTotal += t;
+    a = a + income - t;
+  }
+  return {end:a, tax:taxTotal, fee:0};
+}
+
+function calcInsurance(amount, rate, mf, tax, years){
+  let a = amount, feeTotal = 0;
+  for (let y=0;y<years;y++){
+    const income = a * rate;
+    const pre = a + income;
+    const fee = pre * mf;   // комиссия от суммы после %
+    feeTotal += fee;
+    a = pre - fee;
+  }
+  const profit = Math.max(a - amount, 0);
+  const taxEnd = profit * tax;
+  a -= taxEnd;
+  return {end:a, tax:taxEnd, fee:feeTotal};
+}
+
+function calcIIS(amount, rate, mf, tax, years, exempt){
+  let a = amount, feeTotal = 0;
+  for (let y=0;y<years;y++){
+    const income = a * rate;
+    const pre = a + income;
+    const fee = pre * mf; // комиссия от суммы после %
+    feeTotal += fee;
+    a = pre - fee;
+  }
+  const profit = Math.max(a - amount, 0);
+  const taxable = Math.max(profit - exempt, 0);
+  const taxEnd = taxable * tax;
+  a -= taxEnd;
+  return {end:a, tax:taxEnd, fee:feeTotal};
+}
+
+function run(){
+  const amount = norm(document.getElementById('amount').value);
+  const rate   = pct(document.getElementById('rate').value);
+  const tax    = pct(document.getElementById('tax').value);
+  const term   = Math.max(0, Math.floor(norm(document.getElementById('term').value)));
+  const insMF  = pct(document.getElementById('insMF').value);
+  const iisMF  = pct(document.getElementById('iisMF').value);
+  const iisEx  = norm(document.getElementById('iisExempt').value);
+
+  // Bank
+  const b = calcBank(amount, rate, tax, term);
+  document.getElementById('b_start').textContent = money(amount);
+  document.getElementById('b_end').textContent   = money(b.end);
+  document.getElementById('b_tax').textContent   = money(b.tax);
+  document.getElementById('b_fee').textContent   = money(b.fee);
+
+  // Insurance
+  const i = calcInsurance(amount, rate, insMF, tax, term);
+  document.getElementById('i_start').textContent = money(amount);
+  document.getElementById('i_end').textContent   = money(i.end);
+  document.getElementById('i_tax').textContent   = money(i.tax);
+  document.getElementById('i_fee').textContent   = money(i.fee);
+
+  // IIS
+  const s = calcIIS(amount, rate, iisMF, tax, term, iisEx);
+  document.getElementById('s_start').textContent = money(amount);
+  document.getElementById('s_end').textContent   = money(s.end);
+  document.getElementById('s_tax').textContent   = money(s.tax);
+  document.getElementById('s_fee').textContent   = money(s.fee);
+}
+
+document.getElementById('run').addEventListener('click', run);
+
+// Автозамена запятой на точку
+document.addEventListener('input', (e)=>{
+  if(e.target && e.target.tagName==='INPUT'){
+    e.target.value = e.target.value.replace(',', '.');
+  }
+});
+</script>
 </body>
 </html>
